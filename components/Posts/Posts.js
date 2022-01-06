@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { gql, useQuery } from '@apollo/client';
+import { Button, TextField } from "@mui/material";
 import PostList from "./PostList";
 
 
@@ -77,12 +78,10 @@ const Posts = () => {
 
     return (
         <div>
-            <input 
-                id="search-bar" 
-                className="shadow-card" 
-                type="text" 
-                placeholder="Search posts (press Enter to search)" 
-                ref = {searchRef}
+            <TextField
+                fullWidth
+                placeholder="Search posts (press Enter to search)"
+                inputRef={searchRef}
                 onKeyPress={handleKeyPress}
             />
             {isFiltered && (
