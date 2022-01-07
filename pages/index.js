@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import ClientOnly from '../components/ClientOnly'
 import Posts from '../components/Posts/Posts'
-import styles from '../styles/Home.module.css'
 import { Typography, Container, Link } from '@mui/material'
 
 export default function Home() {
