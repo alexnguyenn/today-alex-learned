@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { gql, useQuery } from '@apollo/client';
-import { Box, TextField, CircularProgress, Alert, AlertTitle, Link } from "@mui/material";
+import { Box, TextField, CircularProgress, Alert, AlertTitle, Link, Typography } from "@mui/material";
 import PostList from "./PostList";
 
 
@@ -115,7 +115,16 @@ const Posts = () => {
                 }}
             />
             {isFiltered && (
-                <p id="reset-filter" onClick={resetFilter}>Reset Search</p>
+                <Typography
+                    mt={2}  
+                    variant="body1"
+                    align="center"
+                    color="primary"
+                    sx={{cursor: "pointer"}}
+                    onClick={resetFilter}
+                >
+                    Reset current filter
+                </Typography>
             )}
             <PostList posts={posts} loadMore={loadMore}/>
         </Box>
