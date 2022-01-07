@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { gql, useQuery } from '@apollo/client';
-import { Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import PostList from "./PostList";
 
 
@@ -77,18 +77,23 @@ const Posts = () => {
     };
 
     return (
-        <div>
+        <Box mt={2}>
             <TextField
-                fullWidth
+            fullWidth
                 placeholder="Search posts (press Enter to search)"
                 inputRef={searchRef}
                 onKeyPress={handleKeyPress}
+                sx={{
+                    width: {"xs": "100%", "sm": "80%", "lg": "60%", "xl": "45%"},
+                    mx: "auto",
+                    display: "block",
+                }}
             />
             {isFiltered && (
                 <p id="reset-filter" onClick={resetFilter}>Reset Search</p>
             )}
             <PostList posts={posts} loadMore={loadMore}/>
-        </div>
+        </Box>
     );
 }
 

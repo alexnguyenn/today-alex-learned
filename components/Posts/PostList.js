@@ -12,8 +12,8 @@ const PostList = (props) => {
 
     return (
         <Box 
+            mt={2}
             sx = {{
-                marginTop: "2rem",
                 display: "flex",
                 gap: "1rem",
                 flexWrap: "wrap",
