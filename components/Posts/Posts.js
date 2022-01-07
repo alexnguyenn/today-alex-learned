@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { gql, useQuery } from '@apollo/client';
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, CircularProgress, Alert, AlertTitle, Link } from "@mui/material";
 import PostList from "./PostList";
 
 
@@ -34,8 +34,33 @@ const Posts = () => {
         },
     });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading content from GraphCMS :(</p>;
+    if (loading) return (
+        <Box display="flex">
+            <CircularProgress sx={{m: "auto"}}/>
+        </Box>
+    );
+    
+    if (error) return (
+        <Box display="flex">
+            <Alert 
+                severity="error" 
+                sx={{
+                    m: "auto",
+                    width: {"xs": "100%", "sm": "90%", "lg": "60%", "xl": "45%"}
+                }}
+            >
+                <AlertTitle>Error</AlertTitle>
+                {"Failed to load content. "}
+                <Link 
+                    sx={{cursor: "pointer"}}
+                    onClick={() => refetch()}
+                    underline="none"
+                >
+                    Click here to try again
+                </Link>
+            </Alert>
+        </Box>
+    );
     
     const posts = data.postsConnection.edges;
     const pageInfo = data.postsConnection.pageInfo;
@@ -79,7 +104,7 @@ const Posts = () => {
     return (
         <Box mt={2}>
             <TextField
-            fullWidth
+                fullWidth
                 placeholder="Search posts (press Enter to search)"
                 inputRef={searchRef}
                 onKeyPress={handleKeyPress}
