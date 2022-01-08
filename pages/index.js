@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import ClientOnly from '../components/ClientOnly'
 import Posts from '../components/Posts/Posts'
-import { Typography, Container, Link } from '@mui/material'
+import { Fab, Typography, Container, Link } from '@mui/material'
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 export default function Home() {
     return (
@@ -22,6 +23,18 @@ export default function Home() {
             <ClientOnly>
                 <Posts />
             </ClientOnly>
+            <Fab 
+                color="secondary" 
+                aria-label="add" 
+                sx={{
+                    position: "fixed",
+                    bottom: "1.5rem",
+                    right: "1.5rem",
+                }}
+                href="/create"
+            >
+                <AddBoxIcon />
+            </Fab>
         </Container>
     )
 }
