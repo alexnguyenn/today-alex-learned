@@ -11,9 +11,7 @@ const GET_POSTS = gql`
                 node {
                     id
                     title
-                    description {
-                        markdown
-                    }
+                    description
                 }
             }
             pageInfo {

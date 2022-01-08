@@ -33,7 +33,7 @@ const PostList = (props) => {
                 >
                     <Typography variant="h5" sx={{ fontWeight: "bold"}}>{post.node.title}</Typography>
                     <ReactMarkdown>
-                        {post.node.description.markdown}
+                        {post.node.description}
                     </ReactMarkdown>
                 </Card>
             ))}
