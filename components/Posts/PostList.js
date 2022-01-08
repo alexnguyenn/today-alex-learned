@@ -1,4 +1,4 @@
-import { Card, Box } from "@mui/material";
+import { Card, Box, Typography } from "@mui/material";
 import useInView from "react-cool-inview";
 import ReactMarkdown from "react-markdown";
 
@@ -12,7 +12,7 @@ const PostList = (props) => {
 
     return (
         <Box 
-            mt={2}
+            my={2}
             sx = {{
                 display: "flex",
                 gap: "1rem",
@@ -31,11 +31,11 @@ const PostList = (props) => {
                         width: {"xs": "100%", "sm": "calc(50% - .5rem)", "lg": "calc(33% - .66rem)", "xl": "calc(25% - .75rem)"},
                     }}
                 >
-                    <h2>{post.node.title}</h2>
+                    <Typography variant="h5" sx={{ fontWeight: "bold"}}>{post.node.title}</Typography>
                     <ReactMarkdown>
                         {post.node.description.markdown}
                     </ReactMarkdown>
-                </Card>                
+                </Card>
             ))}
         </Box>
     );
