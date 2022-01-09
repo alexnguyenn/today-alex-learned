@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { Container, Typography, Link, Box, Backdrop, CircularProgress, Alert, Snackbar } from '@mui/material'
+import { Container, Typography, Box, Backdrop, CircularProgress, Alert, Snackbar } from '@mui/material'
 import PostForm from '../components/Posts/PostForm';
+import Link from '../components/Link';
 
 const NewPost = () => {
     const [description, setDescription] = useState("Write something here...");
