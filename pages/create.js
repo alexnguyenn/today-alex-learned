@@ -32,6 +32,8 @@ const NewPost = () => {
             setError(data.error);
         } else if (data.success) {
             setIsSuccess(true);
+            setTitle("");
+            setDescription("Write something here...");
         }
         setIsLoading(false);
     }
@@ -67,7 +69,7 @@ const NewPost = () => {
                 onFormSubmit={onFormSubmit}
             />
             <Snackbar open={isSuccess} autoHideDuration={10000} onClose={() => setIsSuccess(false)}>
-                <Alert severity="success" onClose={() => setIsSuccess(false)} sx={{ width: '100%' }}>
+                <Alert severity="success" onClose={() => setIsSuccess(false)} sx={{ width: "100%" }}>
                     Post created and published successfully!
                 </Alert>
             </Snackbar>
