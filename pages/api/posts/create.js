@@ -1,4 +1,5 @@
-import { gql, GraphQLClient } from 'graphql-request'
+import client from '../../../apollo-client';
+import { gql } from '@apollo/client';
 import bcrypt from 'bcrypt'
 
 const CreatePostMutation = gql`
@@ -37,21 +38,22 @@ const handler = async (req, res) => {
         return
     }
 
-    const client = new GraphQLClient(process.env.NEXT_PUBLIC_GRAPHCMS_API_URI, {
-        headers: {
-            Authorization: `Bearer ${process.env.GRAPHCMS_API_PAT}`
-        }
-    })
-
-    const variables = {
-        title: req.body.title,
-        description: req.body.description,
-    }
-
     try {
-        const { createPost } = await client.request(CreatePostMutation, variables)
+        const { data } = await client.mutate({
+            mutation: CreatePostMutation,
+            variables: {
+                title: req.body.title,
+                description: req.body.description,
+            },
+        });
+
         try {
-            await client.request(publishPostMutation, { id: createPost.id })
+            await client.mutate({
+                mutation: publishPostMutation,
+                variables: {
+                    id: data.createPost.id,
+                },
+            });
             res.status(200).json({success: true})
         } catch (err) {
             res.status(500).json({

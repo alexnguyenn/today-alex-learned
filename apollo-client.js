@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client"
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client"
 import { relayStylePagination } from '@apollo/client/utilities';
 
 const cache = new InMemoryCache({
@@ -12,7 +12,13 @@ const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GRAPHCMS_API_URI,
+    ssrMode: typeof window === "undefined",
+    link: createHttpLink({
+        uri: process.env.NEXT_PUBLIC_GRAPHCMS_API_URI,
+        headers: {
+            Authorization: typeof window === "undefined" ? `Bearer ${process.env.GRAPHCMS_API_PAT}` : "",
+        },
+    }),
     cache: cache,
 });
 
