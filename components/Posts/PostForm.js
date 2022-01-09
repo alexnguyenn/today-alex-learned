@@ -47,7 +47,7 @@ const PostForm = (props) => {
                 variant="outlined" 
                 required 
                 placeholder="Enter the title here" 
-                defaultValue={props.title}
+                value={props.title}
                 onChange={(event) => props.setTitle(event.target.value)}
             />
             <Typography mt={2} variant="h6">Description</Typography>
