@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import ClientOnly from '../components/ClientOnly'
 import Posts from '../components/Posts/Posts'
-import { Typography, Container, Link } from '@mui/material'
+import { Fab, Typography, Container, Link } from '@mui/material'
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 export default function Home() {
     return (
@@ -10,7 +11,7 @@ export default function Home() {
                 <meta name="description" content="Alex's daily programming-related notes" />
                 <title>Today I Learned</title>
             </Head>
-            <Container maxWidth="md" sx={{pt: 2}}>
+            <Container maxWidth="md">
                 <Typography variant="h3" align="center">Today I Learned</Typography>
                 <Typography variant="body1" align="center" paragraph>
                     {"Hi there! I am "}
@@ -22,6 +23,18 @@ export default function Home() {
             <ClientOnly>
                 <Posts />
             </ClientOnly>
+            <Fab 
+                color="secondary" 
+                aria-label="add" 
+                sx={{
+                    position: "fixed",
+                    bottom: "1.5rem",
+                    right: "1.5rem",
+                }}
+                href="/create"
+            >
+                <AddBoxIcon />
+            </Fab>
         </Container>
     )
 }
