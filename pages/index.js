@@ -11,7 +11,7 @@ export default function Home() {
                 <meta name="description" content="Alex's daily programming-related notes" />
                 <title>Today I Learned</title>
             </Head>
-            <Container maxWidth="md" sx={{pt: 2}}>
+            <Container maxWidth="md">
                 <Typography variant="h3" align="center">Today I Learned</Typography>
                 <Typography variant="body1" align="center" paragraph>
                     {"Hi there! I am "}
