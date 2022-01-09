@@ -24,8 +24,8 @@ const PostForm = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [emptyWarning, setEmptyWarning] = useState(false);
 
-    const submitHandler = (e) => {
-        e.preventDefault();
+    const submitHandler = (event) => {
+        event.preventDefault();
         if (props.title.length === 0 || props.description.length === 0) {
             setEmptyWarning(true);
         } else {
@@ -48,7 +48,7 @@ const PostForm = (props) => {
                 required 
                 placeholder="Enter the title here" 
                 defaultValue={props.title}
-                onChange={(e) => props.setTitle(e.target.value)}
+                onChange={(event) => props.setTitle(event.target.value)}
             />
             <Typography mt={2} variant="h6">Description</Typography>
             <SimpleMdeReact 
@@ -77,14 +77,14 @@ const PostForm = (props) => {
                         type="password"
                         placeholder="Enter the password here"
                         defaultValue={props.password}
-                        onChange={(e) => props.setPassword(e.target.value)}
+                        onChange={(event) => props.setPassword(event.target.value)}
                     />
                     <Box mt={2}>
                         <Button
                             fullWidth
                             variant="contained"
                             onClick={() => {
-                                props.formSubmitHandler();
+                                props.onFormSubmit();
                                 setModalOpen(false);
                             }}
                         >
