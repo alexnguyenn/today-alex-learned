@@ -1,27 +1,15 @@
 import dynamic from 'next/dynamic';
 import { useState } from 'react'
-import { Alert, Box, Button, Modal, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, TextField, Typography } from '@mui/material'
+import { Dialog, DialogContent, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 const SimpleMdeReact = dynamic(
     () => import("react-simplemde-editor"), 
     {ssr: false}
 );
 import "easymde/dist/easymde.min.css";
 
-const modalStyles = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    borderRadius: 2,
-    py: 2,
-    px: 4
-}
-
 const PostForm = (props) => {
-    const [modalOpen, setModalOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [emptyWarning, setEmptyWarning] = useState(false);
 
     const submitHandler = (event) => {
@@ -30,7 +18,7 @@ const PostForm = (props) => {
             setEmptyWarning(true);
         } else {
             setEmptyWarning(false);
-            setModalOpen(true);
+            setDialogOpen(true);
         }
     }
 
@@ -62,37 +50,32 @@ const PostForm = (props) => {
             >
                 Submit
             </Button>
-            <Modal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-            >
-                <Box p={2} sx={modalStyles}>
-                    <Typography mb={2} variant="h6">
-                        Please confirm the password to submit
-                    </Typography>
+            <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+                <DialogTitle>Enter Password</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        This form is password-protected. Please enter your password to submit.
+                    </DialogContentText>
                     <TextField
-                        variant="outlined"
+                        sx={{ mt: 1 }}
+                        variant="standard"
+                        label="Password"
                         fullWidth
                         required
                         type="password"
-                        placeholder="Enter the password here"
-                        defaultValue={props.password}
                         onChange={(event) => props.setPassword(event.target.value)}
                     />
-                    <Box mt={2}>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            onClick={() => {
-                                props.onFormSubmit();
-                                setModalOpen(false);
-                            }}
-                        >
-                            Submit
-                        </Button>
-                    </Box>
-                </Box>
-            </Modal>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={() => {
+                        props.onFormSubmit();
+                        setDialogOpen(false);
+                    }}>
+                        Submit
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
