@@ -4,9 +4,12 @@ import ReactMarkdown from "react-markdown";
 
 const PostList = (props) => {
     const { observe } = useInView({
-        onEnter: ({ unobserve }) => {
-            unobserve();
-            props.loadMore();
+        threshold: 0.65,
+        onChange: ({ inView, unobserve }) => {
+            if (inView) {
+                unobserve();
+                props.loadMore();
+            }
         },
     });
 
