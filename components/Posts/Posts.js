@@ -3,8 +3,10 @@ import { gql, useQuery } from '@apollo/client';
 import { Box, TextField, CircularProgress, Alert, AlertTitle, Link, Typography } from "@mui/material";
 import PostList from "./PostList";
 
+const POSTS_PER_PAGE = 10;
+export const POSTS_FIRST_PAGE = 20;
 
-const GET_POSTS = gql`
+export const GET_POSTS = gql`
     query($first: Int!, $after: String, $search: String! = "") {
         postsConnection(orderBy: createdAt_DESC, first: $first, after: $after, where: {_search: $search}) {
             edges {
@@ -20,46 +22,18 @@ const GET_POSTS = gql`
             }
         }
     }
-`;  
+`;
 
-  
 const Posts = () => {
     const [isFiltered, setIsFiltered] = useState(false);
     const searchRef = useRef();
-    const { loading, error, data, fetchMore, refetch } = useQuery(GET_POSTS, {
+    const { error, data, fetchMore, refetch } = useQuery(GET_POSTS, {
+        fetchPolicy: "cache-and-network",
         variables: {
-            first: 20,
+            first: POSTS_FIRST_PAGE,
         },
     });
 
-    if (loading) return (
-        <Box display="flex">
-            <CircularProgress sx={{m: "auto"}}/>
-        </Box>
-    );
-    
-    if (error) return (
-        <Box display="flex">
-            <Alert 
-                severity="error" 
-                sx={{
-                    m: "auto",
-                    width: {"xs": "100%", "sm": "90%", "lg": "60%", "xl": "45%"}
-                }}
-            >
-                <AlertTitle>Error</AlertTitle>
-                {"Failed to load content. "}
-                <Link 
-                    sx={{cursor: "pointer"}}
-                    onClick={() => refetch()}
-                    underline="none"
-                >
-                    Click here to try again
-                </Link>
-            </Alert>
-        </Box>
-    );
-    
     const posts = data.postsConnection.edges;
     const pageInfo = data.postsConnection.pageInfo;
 
@@ -92,7 +66,7 @@ const Posts = () => {
         if (pageInfo.hasNextPage) {
             fetchMore({
                 variables: {
-                    first: 10,
+                    first: POSTS_PER_PAGE,
                     after: pageInfo.endCursor
                 },
             });
@@ -100,7 +74,7 @@ const Posts = () => {
     };
 
     return (
-        <Box mt={2}>
+        <Box mt={2} display="flex" sx={{flexDirection: "column"}}>
             <TextField
                 fullWidth
                 placeholder="Search posts (press Enter to search)"
@@ -112,6 +86,26 @@ const Posts = () => {
                     display: "block",
                 }}
             />
+            {error && (
+                <Alert 
+                    severity="error" 
+                    sx={{
+                        mx: "auto",
+                        mt: 2,
+                        width: {"xs": "100%", "sm": "90%", "lg": "60%", "xl": "45%"}
+                    }}
+                >
+                    <AlertTitle>Error</AlertTitle>
+                    {"Failed to load content. "}
+                    <Link 
+                        sx={{cursor: "pointer"}}
+                        onClick={() => refetch()}
+                        underline="none"
+                    >
+                        Click here to try again
+                    </Link>
+                </Alert>
+            )}
             {isFiltered && (
                 <Typography
                     mt={2}  

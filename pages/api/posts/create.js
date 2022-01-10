@@ -1,6 +1,6 @@
-import client from '../../../apollo-client';
 import { gql } from '@apollo/client';
 import bcrypt from 'bcrypt'
+import { initializeApollo } from '../../../apollo-client';
 
 const CreatePostMutation = gql`
     mutation createPost($title: String!, $description: String!) {
@@ -38,8 +38,10 @@ const handler = async (req, res) => {
         return
     }
 
+    const apolloClient = initializeApollo()
+
     try {
-        const { data } = await client.mutate({
+        const { data } = await apolloClient.mutate({
             mutation: CreatePostMutation,
             variables: {
                 title: req.body.title,
@@ -48,7 +50,7 @@ const handler = async (req, res) => {
         });
 
         try {
-            await client.mutate({
+            await apolloClient.mutate({
                 mutation: publishPostMutation,
                 variables: {
                     id: data.createPost.id,
