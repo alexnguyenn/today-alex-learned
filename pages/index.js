@@ -2,8 +2,9 @@ import Head from 'next/head'
 import { Fab, Typography, Container, Link as MuiLink } from '@mui/material'
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ClientOnly from '../components/ClientOnly'
-import Posts from '../components/Posts/Posts'
+import Posts, { GET_POSTS, POSTS_FIRST_PAGE } from '../components/Posts/Posts'
 import { NextLinkComposed } from '../components/Link'
+import { initializeApollo } from '../apollo-client'
 
 export default function Home() {
     return (
@@ -39,4 +40,21 @@ export default function Home() {
             </Fab>
         </Container>
     )
+}
+
+export async function getStaticProps(context) {
+    const apolloClient = initializeApollo();
+
+    await apolloClient.query({
+        query: GET_POSTS,
+        variables: {
+            first: POSTS_FIRST_PAGE,
+        },
+    });
+
+    return {
+        props: {
+            "__APOLLO_STATE__": apolloClient.cache.extract(),
+        }
+    }
 }

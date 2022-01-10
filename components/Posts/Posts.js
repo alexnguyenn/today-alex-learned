@@ -3,8 +3,10 @@ import { gql, useQuery } from '@apollo/client';
 import { Box, TextField, CircularProgress, Alert, AlertTitle, Link, Typography } from "@mui/material";
 import PostList from "./PostList";
 
+const POSTS_PER_PAGE = 10;
+export const POSTS_FIRST_PAGE = 20;
 
-const GET_POSTS = gql`
+export const GET_POSTS = gql`
     query($first: Int!, $after: String, $search: String! = "") {
         postsConnection(orderBy: createdAt_DESC, first: $first, after: $after, where: {_search: $search}) {
             edges {
@@ -20,15 +22,14 @@ const GET_POSTS = gql`
             }
         }
     }
-`;  
+`;
 
-  
 const Posts = () => {
     const [isFiltered, setIsFiltered] = useState(false);
     const searchRef = useRef();
     const { loading, error, data, fetchMore, refetch } = useQuery(GET_POSTS, {
         variables: {
-            first: 20,
+            first: POSTS_FIRST_PAGE,
         },
     });
 
@@ -92,7 +93,7 @@ const Posts = () => {
         if (pageInfo.hasNextPage) {
             fetchMore({
                 variables: {
-                    first: 10,
+                    first: POSTS_PER_PAGE,
                     after: pageInfo.endCursor
                 },
             });
