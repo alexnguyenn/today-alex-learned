@@ -55,6 +55,7 @@ export async function getStaticProps(context) {
     return {
         props: {
             "__APOLLO_STATE__": apolloClient.cache.extract(),
-        }
+        },
+        revalidate: 43200,
     }
 }
