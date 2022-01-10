@@ -27,7 +27,7 @@ const PostList = (props) => {
             {props.posts.map((post, index) => (
                 <Card
                     variant="outlined"
-                    key={post.node.id}
+                    key={post.node.id + index}
                     ref={index === props.posts.length - 1 ? observe : null}
                     sx = {{
                         padding: "1rem",
