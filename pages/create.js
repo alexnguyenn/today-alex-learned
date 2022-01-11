@@ -7,17 +7,15 @@ import Link from '../components/Link';
 const NewPost = () => {
     const [description, setDescription] = useState("Write something here...");
     const [title, setTitle] = useState("");
-    const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isSuccess, setIsSuccess] = useState(false);
 
     const onFormSubmit = async () => {
-        setPassword("");
         setError(null);
         setIsSuccess(false);
         setIsLoading(true);
-        const response = await fetch("/api/posts/create", {
+        const response = await fetch("/api/posts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -25,13 +23,12 @@ const NewPost = () => {
             body: JSON.stringify({
                 title,
                 description,
-                password
             })
         });
         const data = await response.json();
-        if (data.error) {
-            setError(data.error);
-        } else if (data.success) {
+        if (data.status === "error") {
+            setError(data.message);
+        } else if (data.status === "success") {
             setIsSuccess(true);
             setTitle("");
             setDescription("Write something here...");
@@ -57,16 +54,13 @@ const NewPost = () => {
                 <Link href="/" underline="none">Back to Home</Link>
             </Box>
             {error && (
-                <Alert severity="error" sx={{mb: 2, mx: "auto", maxWidth: "lg"}}>
-                    {error.message}
-                </Alert>
+                <Alert severity="error" sx={{mb: 2, mx: "auto", maxWidth: "lg"}}>{error}</Alert>
             )}
             <PostForm 
                 title={title}
                 description={description}
                 setTitle={setTitle}
                 setDescription={setDescription}
-                setPassword={setPassword}
                 onFormSubmit={onFormSubmit}
             />
             <Snackbar open={isSuccess} autoHideDuration={10000} onClose={() => setIsSuccess(false)}>

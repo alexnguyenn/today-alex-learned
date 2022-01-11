@@ -51,20 +51,11 @@ const PostForm = (props) => {
                 Submit
             </Button>
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-                <DialogTitle>Enter Password</DialogTitle>
+                <DialogTitle>Confirm Submission</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        This form is password-protected. Please enter your password to submit.
+                        Are you sure you want to submit this post?
                     </DialogContentText>
-                    <TextField
-                        sx={{ mt: 1 }}
-                        variant="standard"
-                        label="Password"
-                        fullWidth
-                        required
-                        type="password"
-                        onChange={(event) => props.setPassword(event.target.value)}
-                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
