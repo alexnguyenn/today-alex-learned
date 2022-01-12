@@ -1,15 +1,17 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { Container, Typography, Box, Backdrop, CircularProgress, Alert, Snackbar, Button } from '@mui/material'
+import { Container, Typography, Box, Backdrop, CircularProgress, Alert, Snackbar, Button, AlertTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { initializeApollo } from "../../apollo-client";
 import { gql } from "@apollo/client";
+import { useSession, getSession, signIn } from 'next-auth/react';
 import PostForm from "../../components/Posts/PostForm";
 import Link from '../../components/Link';
 import PostSubmitDialog from "../../components/Posts/PostSubmitDialog";
 
 const EditPost = ({ post }) => {
+    const { status } = useSession();
     const [description, setDescription] = useState(post.description);
     const [title, setTitle] = useState(post.title);
     const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +19,8 @@ const EditPost = ({ post }) => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [unpublishDialogOpen, setUnpublishDialogOpen] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+
+    const authenticated = status === "authenticated";
 
     const submitHandler = (event, isUpdateSubmit) => {
         event.preventDefault();
@@ -93,6 +97,18 @@ const EditPost = ({ post }) => {
                 <Typography variant="h3" align="center">Edit post</Typography>
                 <Link href="/" underline="none">Back to Home</Link>
             </Box>
+            {!authenticated && (
+                <Alert 
+                    severity="warning" 
+                    sx={{mb: 2, mx: "auto", maxWidth: "lg"}}
+                    action={
+                        <Button color="inherit" onClick={() => signIn()}>Sign In</Button>
+                    } 
+                >
+                    <AlertTitle>This form is protected!</AlertTitle>
+                    You need to be logged in to edit this post.
+                </Alert>
+            )}
             {error && (
                 <Alert severity="error" sx={{mb: 2, mx: "auto", maxWidth: "lg"}}>{error}</Alert>
             )}
@@ -108,6 +124,7 @@ const EditPost = ({ post }) => {
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
                     onClick={(e) => submitHandler(e, true)}
                     endIcon={<EditIcon />}
+                    disabled={!authenticated || isLoading}
                 >
                     Update
                 </Button>
@@ -117,6 +134,7 @@ const EditPost = ({ post }) => {
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
                     onClick={(e) => submitHandler(e, false)}
                     startIcon={<DeleteIcon />}
+                    disabled={!authenticated || isLoading}
                 >
                     Unpublish
                 </Button>
@@ -176,6 +194,7 @@ export async function getServerSideProps(context) {
     return {
         props: {
             post: data.post,
+            session: await getSession(context),
         },
     };
 }

@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { Button, Container, Typography, Box, Backdrop, CircularProgress, Alert, Snackbar } from '@mui/material'
+import { Button, Container, Typography, Box, Backdrop, CircularProgress, Alert, AlertTitle, Snackbar } from '@mui/material'
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import PostForm from '../components/Posts/PostForm';
 import Link from '../components/Link';
 import PostSubmitDialog from '../components/Posts/PostSubmitDialog';
@@ -69,13 +69,20 @@ const NewPost = () => {
                 <Typography variant="h3" align="center">Create new post</Typography>
                 <Link href="/" underline="none">Back to Home</Link>
             </Box>
+            {!authenticated && (
+                <Alert 
+                    severity="warning" 
+                    sx={{mb: 2, mx: "auto", maxWidth: "lg"}}
+                    action={
+                        <Button color="inherit" onClick={() => signIn()}>Sign In</Button>
+                    } 
+                >
+                    <AlertTitle>This form is protected!</AlertTitle>
+                    You need to be logged in to create a new post.
+                </Alert>
+            )}
             {error && (
                 <Alert severity="error" sx={{mb: 2, mx: "auto", maxWidth: "lg"}}>{error}</Alert>
-            )}
-            {authenticated && (
-                <Alert severity="warning" sx={{mb: 2, mx: "auto", maxWidth: "lg"}}>
-                    This form is proctected. You need to be logged in to create a new post.
-                </Alert>
             )}
             <PostForm
                 title={title}
@@ -89,6 +96,7 @@ const NewPost = () => {
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
                     onClick={submitHandler}
                     endIcon={<NoteAddIcon />}
+                    disabled={!authenticated || isLoading}
                 >
                     Create Post
                 </Button>
