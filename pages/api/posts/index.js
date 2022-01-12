@@ -18,15 +18,15 @@ const publishPostMutation = gql`
     }
 `
 
-export default async (req, res) => {
+const handler = async (req, res) => {
     const session = await getSession({ req });
     const httpMethod = req.method
-    const apolloClient = initializeApollo() 
+    const apolloClient = initializeApollo()
 
     switch (httpMethod) {
         case "POST":
             const { title, description } = req.body
-            
+
             if (!session) {
                 res.status(401).json({
                     status: "error",
@@ -78,3 +78,5 @@ export default async (req, res) => {
             break
     }
 }
+
+export default handler;

@@ -18,7 +18,7 @@ const UnpublishPostMutation = gql`
     }
 `
 
-export default async (req, res) => {
+const handler = async (req, res) => {
     const session = await getSession({ req });
     const httpMethod = req.method
     const apolloClient = initializeApollo()
@@ -89,3 +89,5 @@ export default async (req, res) => {
             break
     }
 }
+
+export default handler;

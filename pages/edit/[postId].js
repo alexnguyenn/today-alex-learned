@@ -9,7 +9,7 @@ import PostForm from "../../components/Posts/PostForm";
 import Link from '../../components/Link';
 import PostSubmitDialog from "../../components/Posts/PostSubmitDialog";
 
-export default ({ post }) => {
+const EditPost = ({ post }) => {
     const [description, setDescription] = useState(post.description);
     const [title, setTitle] = useState(post.title);
     const [isLoading, setIsLoading] = useState(false);
@@ -179,3 +179,5 @@ export async function getServerSideProps(context) {
         },
     };
 }
+
+export default EditPost;
