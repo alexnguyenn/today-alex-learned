@@ -13,23 +13,50 @@ export default ({ post }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isSuccess, setIsSuccess] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [unpublishDialogOpen, setUnpublishDialogOpen] = useState(false);
+    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
-    const submitHandler = (event) => {
+    const submitHandler = (event, isUpdateSubmit) => {
         event.preventDefault();
         if (title.length === 0 || description.length === 0) {
             setError("Title and description cannot be empty!");
         } else {
             setError(null);
-            setDialogOpen(true);
+            if (isUpdateSubmit) {
+                setUpdateDialogOpen(true);
+            } else {
+                setUnpublishDialogOpen(true);
+            }
         }
     }
 
-    const onFormSubmit = async () => {
+    const onPostUpdate = async () => {
         setIsSuccess(false);
         setIsLoading(true);
         const response = await fetch(`/api/posts/${post.id}`, {
             method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title,
+                description,
+            })
+        });
+        const data = await response.json();
+        setIsLoading(false);
+        if (data.status === "error") {
+            setError(data.message);
+        } else if (data.status === "success") {
+            setIsSuccess(true);
+        }
+    }
+
+    const onPostUnpublish = async () => {
+        setIsSuccess(false);
+        setIsLoading(true);
+        const response = await fetch(`/api/posts/${post.id}`, {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -77,16 +104,32 @@ export default ({ post }) => {
                 <Button
                     variant="contained"
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
-                    onClick={submitHandler}
+                    onClick={(e) => submitHandler(e, true)}
                 >
                     Update
                 </Button>
+                <Button
+                    variant="contained"
+                    color="warning"
+                    sx={{ width: {"xs": "100%", "md": "15%"} }}
+                    onClick={(e) => submitHandler(e, false)}
+                >
+                    Unpublish
+                </Button>
             </Box>
             <PostSubmitDialog
-                dialogOpen={dialogOpen}
-                closeDialog={() => setDialogOpen(false)}
-                onSubmit={onFormSubmit}
+                dialogOpen={updateDialogOpen}
+                closeDialog={() => setUpdateDialogOpen(false)}
+                onSubmit={onPostUpdate}
+                dialogTitle="Update"
                 dialogBody="Do you want to update this post?"
+            />
+            <PostSubmitDialog
+                dialogOpen={unpublishDialogOpen}
+                closeDialog={() => setUnpublishDialogOpen(false)}
+                onSubmit={onPostUnpublish}
+                dialogTitle="Confirm unpublish"
+                dialogBody="Do you want to unpublish this post?"
             />
             <Snackbar open={isSuccess} autoHideDuration={10000} onClose={() => setIsSuccess(false)}>
                 <Alert severity="success" onClose={() => setIsSuccess(false)} sx={{ width: "100%" }}>
@@ -109,13 +152,14 @@ export async function getServerSideProps(context) {
         query: gql`
             query($id: ID!) {
                 post(where: {id: $id}) {
+                    id
                     title
                     description
                 }
             }
         `,
         variables: {
-            id: context.query["post-id"],
+            id: context.query["postId"],
         },
     });
 

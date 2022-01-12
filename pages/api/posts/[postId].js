@@ -56,7 +56,7 @@ export default async (req, res) => {
                 }
             }
             break
-        
+
         case "DELETE":
             if (!session) {
                 res.status(401).json({
