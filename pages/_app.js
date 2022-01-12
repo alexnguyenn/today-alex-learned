@@ -5,28 +5,35 @@ import { CacheProvider } from '@emotion/react';
 import createEmotionCache from '../styles/createEmotionCache';
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from '../apollo-client'
+import { SessionProvider } from 'next-auth/react';
 
 import '../styles/globals.css'
 import theme from '../styles/theme';
 
 const clientSideEmotionCache = createEmotionCache();
 
-const MyApp = (props) => {
-    const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+const MyApp = ({ Component, emotionCache = clientSideEmotionCache, pageProps }) => {
     const apolloClient = useApollo(pageProps)
-
     return (
-        <ApolloProvider client={apolloClient}>
-            <Head>
-                <meta name="viewport" content="initial-scale=1, width=device-width" />
-            </Head>
-            <CacheProvider value={emotionCache}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <Component {...pageProps} />
-                </ThemeProvider>
-            </CacheProvider>
-        </ApolloProvider>
+        <SessionProvider 
+            options={{
+                staleTime: 0,
+                refetchInterval: 0,
+            }}
+            session={pageProps.session}
+        >
+            <ApolloProvider client={apolloClient}>
+                <Head>
+                    <meta name="viewport" content="initial-scale=1, width=device-width" />
+                </Head>
+                <CacheProvider value={emotionCache}>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <Component {...pageProps} />
+                    </ThemeProvider>
+                </CacheProvider>
+            </ApolloProvider>
+        </SessionProvider>
     )
 }
 

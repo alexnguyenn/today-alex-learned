@@ -1,6 +1,8 @@
-import { Card, Box, Typography } from "@mui/material";
+import { Card, Box, Typography, CardContent, IconButton } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 import useInView from "react-cool-inview";
 import ReactMarkdown from "react-markdown";
+import { NextLinkComposed } from "../Link";
 
 const PostList = (props) => {
     const { observe } = useInView({
@@ -30,14 +32,20 @@ const PostList = (props) => {
                     key={post.node.id + index}
                     ref={index === props.posts.length - 1 ? observe : null}
                     sx = {{
-                        padding: "1rem",
                         width: {"xs": "100%", "sm": "calc(50% - .5rem)", "lg": "calc(33% - .66rem)", "xl": "calc(25% - .75rem)"},
                     }}
                 >
-                    <Typography variant="h5" sx={{ fontWeight: "bold"}}>{post.node.title}</Typography>
-                    <ReactMarkdown>
-                        {post.node.description}
-                    </ReactMarkdown>
+                    <CardContent>
+                        <Box sx={{ display: "flex", flexDirection: "row", gap: "1rem", alignItems: "start", justifyContent: "space-between"}}>
+                            <Typography variant="h5" sx={{ fontWeight: "bold"}}>{post.node.title}</Typography>
+                            <IconButton component={NextLinkComposed} to={`/edit/${post.node.id}`} title="Edit post">
+                                <EditIcon fontSize="small" sx={{opacity: .3, color: "black"}}></EditIcon>
+                            </IconButton>
+                        </Box>
+                        <ReactMarkdown>
+                            {post.node.description}
+                        </ReactMarkdown>
+                    </CardContent>
                 </Card>
             ))}
         </Box>
