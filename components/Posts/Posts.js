@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { gql, useQuery } from '@apollo/client';
-import { Box, TextField, CircularProgress, Alert, AlertTitle, Link, Typography } from "@mui/material";
+import { Box, TextField, Alert, AlertTitle, Link, Typography, CircularProgress } from "@mui/material";
 import PostList from "./PostList";
 
 const POSTS_PER_PAGE = 10;
@@ -27,12 +27,40 @@ export const GET_POSTS = gql`
 const Posts = () => {
     const [isFiltered, setIsFiltered] = useState(false);
     const searchRef = useRef();
-    const { error, data, fetchMore, refetch } = useQuery(GET_POSTS, {
+    const { error, data, loading, fetchMore, refetch } = useQuery(GET_POSTS, {
         fetchPolicy: "cache-and-network",
         variables: {
             first: POSTS_FIRST_PAGE,
         },
     });
+
+    const warningDialog = (
+        <Alert 
+            severity="error" 
+            sx={{
+                mx: "auto",
+                mt: 2,
+                width: {"xs": "100%", "sm": "90%", "lg": "60%", "xl": "45%"}
+            }}
+        >
+            <AlertTitle>Error</AlertTitle>
+            {"Failed to load content. "}
+            <Link 
+                sx={{cursor: "pointer"}}
+                onClick={() => refetch()}
+                underline="none"
+            >
+                Click here to try again
+            </Link>
+        </Alert>
+    )
+
+    if (!data & loading) return (
+        <Box display="flex">
+            <CircularProgress sx={{m: "auto"}}/>
+        </Box>
+    );
+    if (!data & error) return warningDialog;
 
     const posts = data.postsConnection.edges;
     const pageInfo = data.postsConnection.pageInfo;
@@ -86,26 +114,7 @@ const Posts = () => {
                     display: "block",
                 }}
             />
-            {error && (
-                <Alert 
-                    severity="error" 
-                    sx={{
-                        mx: "auto",
-                        mt: 2,
-                        width: {"xs": "100%", "sm": "90%", "lg": "60%", "xl": "45%"}
-                    }}
-                >
-                    <AlertTitle>Error</AlertTitle>
-                    {"Failed to load content. "}
-                    <Link 
-                        sx={{cursor: "pointer"}}
-                        onClick={() => refetch()}
-                        underline="none"
-                    >
-                        Click here to try again
-                    </Link>
-                </Alert>
-            )}
+            {error && warningDialog}
             {isFiltered && (
                 <Typography
                     mt={2}  

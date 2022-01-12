@@ -14,7 +14,6 @@ const clientSideEmotionCache = createEmotionCache();
 
 const MyApp = ({ Component, emotionCache = clientSideEmotionCache, pageProps }) => {
     const apolloClient = useApollo(pageProps)
-
     return (
         <SessionProvider 
             options={{
