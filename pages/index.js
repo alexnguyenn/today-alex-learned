@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { Fab, Typography, Container, Link as MuiLink } from '@mui/material'
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import ClientOnly from '../components/ClientOnly'
 import Posts, { GET_POSTS, POSTS_FIRST_PAGE } from '../components/Posts/Posts'
 import { NextLinkComposed } from '../components/Link'
@@ -25,18 +25,18 @@ export default function Home() {
             <ClientOnly>
                 <Posts />
             </ClientOnly>
-            <Fab 
+            <Fab
                 component={NextLinkComposed}
                 to="/create"
-                color="secondary" 
-                aria-label="add" 
+                color="secondary"
+                aria-label="add"
                 sx={{
                     position: "fixed",
                     bottom: "1.5rem",
                     right: "1.5rem",
                 }}
             >
-                <AddBoxIcon />
+                <NoteAddIcon />
             </Fab>
         </Container>
     )

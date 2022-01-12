@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { Container, Typography, Box, Backdrop, CircularProgress, Alert, Snackbar, Button } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { initializeApollo } from "../../apollo-client";
 import { gql } from "@apollo/client";
 import PostForm from "../../components/Posts/PostForm";
@@ -105,6 +107,7 @@ export default ({ post }) => {
                     variant="contained"
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
                     onClick={(e) => submitHandler(e, true)}
+                    endIcon={<EditIcon />}
                 >
                     Update
                 </Button>
@@ -113,6 +116,7 @@ export default ({ post }) => {
                     color="warning"
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
                     onClick={(e) => submitHandler(e, false)}
+                    startIcon={<DeleteIcon />}
                 >
                     Unpublish
                 </Button>

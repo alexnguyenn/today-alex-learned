@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { Button, Container, Typography, Box, Backdrop, CircularProgress, Alert, Snackbar } from '@mui/material'
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { useSession } from "next-auth/react";
 import PostForm from '../components/Posts/PostForm';
 import Link from '../components/Link';
@@ -87,8 +88,9 @@ const NewPost = () => {
                     variant="contained"
                     sx={{ width: {"xs": "100%", "md": "15%"} }}
                     onClick={submitHandler}
+                    endIcon={<NoteAddIcon />}
                 >
-                    Update
+                    Create Post
                 </Button>
             </Box>
             <PostSubmitDialog
