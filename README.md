@@ -2,7 +2,7 @@
 
 ***This project is a work-in-progress.***
 
-A simple Next.js app to help me keep track of my notes (programming-related). 
+A Next.js app to help me keep track of my notes (programming-related). 
 An alternative to messaging to myself in Slack :sweat_smile:
 
 Deployed to Vercel at [todayalexlearned.vercel.app](https://todayalexlearned.vercel.app/). 
